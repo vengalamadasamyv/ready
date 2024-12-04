@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abacus Course</title>
+  <link rel="icon" href="/images/main-logo.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/851e180364.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="header">
+    <a href="/index.html"><img src="/images/main-logo.png" alt="nskc-logo"></a>
+    <a href="/abacus/index.html">
+    <button class="login-btn">Back</button>
+    </a>
+  </header>
+  <main class="content">
+    <h1>Start Your <span style="color: dodgerblue;">ABACUS</span> Class</h1>
+    
+  </main>
+  
+  <div class="container">
+    <h2>Your Details</h2>
+   
+    <form class="signup-form">
+      <div class="form-row">
+        <input type="text" placeholder="First Name*" required>
+        <input type="text" placeholder="Last Name*" required>
+      </div>
+      <input type="email" id="mail" placeholder="Mail Id*" required>
+      <input type="text" id="name" placeholder="Mobile Number*" required>
+      
+      <button type="submit" class="submit-btn" onclick="pay(event)">Submit</button>
+    </form>
+    <p>Don't Refresh Your Page <a href="#">!!!</a></p>
+  </div>
+
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h4>Explore More</h4>
+        <ul>
+          <li><a href="#">Day Care</a></li>
+          <li><a href="#">Skill Development</a></li>
+          <li><a href="/tution/index.html">Tution</a></li>
+          <li><a href="#">Internship</a></li>
+          <li><a href="#">Online Mock Test</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>NSKC'S</h4>
+        <ul>
+          <li><a href="#">Franchaise</a></li>
+          <li><a href="#">Become a Tutor</a></li>
+          <li><a href="#">TIN</a></li>
+          <li><a href="./tutor-profile/index.html">Our Creators</a></li>
+          <li><a href="#">Store</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Others</h4>
+        <ul>
+          <li><a href="#">About US</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Privacy & Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Testimonials</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Customer Support</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact Us</h4>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-phone"></i>&nbsp;&nbsp;99 43 66 76 76</a></li>
+          <li><a href="#"><i class="fa-solid fa-envelope"></i>&nbsp;&nbsp;nskcacademy@gmail.com</a></li>
+          <li><a href="#"><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;<b>Head Office</b><br>56, Middle Street,Kalugumalai - 628 552.</a></li>
+          <li><a href="#"><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;<b>Branch Office</b><br>68, West Street,Kalugumalai Road, Near Padma Clinic, Thiruvengadam.</a></li>
+          
+          
+        </ul>
+      </div>
+
+
+      <div class="footer-bottom">
+        <p>© NSKC 2024</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    
+    const form = document.getElementById("contact_form");
+
+    function pay(e) {
+      
+
+        e.preventDefault();
+      const name = document.getElementById("name"),
+        mail = document.getElementById("mail");
+
+      if (name.value == "") {
+        alert("Please Enter a Name...!");
+      } else if (mail.value == "") {
+        alert("Please Enter a Mobile No...!");
+      } else {
+
+
+
+        // "rzp_live_MqOO1HfZDQoptg",
+        // "vL0eMLHMgwaISLcxz9SqKJ6y",
+
+        // rzp_test_4iBHtXAPauuy6C
+        // agiQPnfLPKTdR43A2LwzvvDw
+
+        var options = {
+          key: "rzp_test_OISOOzhRqv9GJ5",
+          key_secret: "JT61fNQSq7iRr5pglqYKnmEk",
+          amount: 600 * 100,
+          currency: "INR",
+          name: "NSKC ACADEMY",
+          description: "FOR YOUR UPSKILLING",
+          handler: function (response) {
+            // alert(response.razorpay_payment_id);
+            console.log(response);
+            if (response.razorpay_payment_id) {
+              alert("Payement Successfully Recieved! Your Bill will be Generated Shortly via Mail, Check the mail in few minutes!!!");
+              window.location.href = "/index.html";
+            }
+          },
+          prefill: {
+            name: "Nethra Shree Kids & Culturals Academy",
+            email: "nskcacademy@gmail.com",
+            contact: "99 43 66 76 76",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+        window.Razorpay(options).open();
+    }
+      
+    }
+
+    
+
+    var razorpayScript = document.createElement("script");
+    razorpayScript.src = "https://checkout.razorpay.com/v1/checkout.js";
+    razorpayScript.onload = function () {
+      console.log("Razorpay script loaded.");
+    };
+    document.head.appendChild(razorpayScript);
+
+
+
+
+    // popup
+
+    
+  
+  </script>
+</body>
+</html>
