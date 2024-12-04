@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COURSE PAGE</title>
+    <style>
+
+        .main-body{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+
+            iframe{
+                height: 100vh;
+                width: 600px;
+                flex-basis: 75%;
+            }
+
+            .chats{
+                flex-basis: 25%;
+                height: 100vh;
+            }
+
+            .chat-input{
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .chat-input > input{
+                padding: 10px 5px;
+                font-weight: 700;
+                width: 269px;
+                border: none;
+            }
+
+            .chat-input > input:focus{
+                border: none;
+                outline: none;
+            }
+            
+            .chat-input > button{
+                background-color: rgb(59, 131, 246);
+                color: white;
+                border: none;
+                padding: 11px 10px;
+            }
+
+            .container  h2{
+                font-size: 24px;
+                font-weight: 900 !important;
+            }
+
+            
+        
+        
+        @media screen and (min-width:320px) and (max-width:768px){
+            iframe{
+                height: 370px;
+                width: 100%;
+                flex-basis: 100%;
+            }
+
+            .chat-input > input{
+                padding: 10px 5px;
+                font-weight: 700;
+                width: 193px;
+            }
+
+            .chats{
+                flex-basis: 100%;
+                flex-wrap: wrap ;
+            }
+
+            .main-body{
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-body">
+    <iframe src="https://nskc-meet.vercel.app/meeting/user_2nTUutI2s3jicDMxJQHTq8bCn5t?personal=true"></iframe>
+    <div class="chats">
+        <div class="container">
+            <h2>N-CHAT-ROOM</h2>
+            <div class="chat-window" id="chatWindow"></div>
+            <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type your message here..." />
+            <button onclick="submitMessage()">Submit</button>
+            <button onclick="clearChat()">C</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Use older Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Firebase Configuration (Replace with your own Firebase config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBskmcG-VThF3OY8ZKpVgIec-NE6GHoy6I",
+            authDomain: "nskc-chat.firebaseapp.com",
+            databaseURL: "https://nskc-chat-default-rtdb.firebaseio.com",
+            projectId: "nskc-chat",
+            storageBucket: "nskc-chat.firebasestorage.app",
+            messagingSenderId: "507362536093",
+            appId: "1:507362536093:web:f87b0f6eafb9ef69878274"
+        };
+    
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    
+        // Submit a message to Firebase Realtime Database
+        function submitMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+    
+            if (message) {
+                // Send message to Firebase Database
+                database.ref('messages').push({
+                    message: message,
+                    timestamp: Date.now()
+                });
+    
+                // Clear input field
+                messageInput.value = '';
+            }
+        }
+    
+        // Listen for new messages in the Firebase Realtime Database
+        function listenForMessages() {
+            const chatWindow = document.getElementById('chatWindow');
+            
+            // Listen for messages added to the "messages" reference
+            database.ref('messages').on('child_added', function(snapshot) {
+                const message = snapshot.val().message;
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.textContent = message;
+                chatWindow.appendChild(messageDiv);
+    
+                // Scroll to the bottom of the chat window
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            });
+        }
+    
+        // Fetch existing messages when the page loads
+        function loadMessages() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.innerHTML = ''; // Clear the chat window first
+    
+            // Fetch all messages from Firebase
+            database.ref('messages').once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    const message = childSnapshot.val().message;
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message');
+                    messageDiv.textContent = message;
+                    chatWindow.appendChild(messageDiv);
+                });
+    
+                // Scroll to the bottom of the chat window
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            });
+        }
+    
+        // Clear all messages from Firebase
+        function clearChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            // Confirm if the user wants to clear the chat
+            if (confirm('Are you sure you want to clear all messages?')) {
+                // Remove all messages from Firebase
+                database.ref('messages').remove().then(function() {
+                    // Clear the chat window after removing messages from Firebase
+                    chatWindow.innerHTML = '';
+                    alert('Chat cleared!');
+                }).catch(function(error) {
+                    console.error('Error clearing chat: ', error);
+                    alert('Failed to clear chat.');
+                });
+            }
+        }
+    
+        // Call listenForMessages when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // loadMessages(); // Load existing messages
+            listenForMessages(); // Listen for new messages
+        });
+    </script>
+    
+    
+</body>
+</html>
